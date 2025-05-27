@@ -1,0 +1,18 @@
+steps:
+  # Step 1: Use the npm builder image to install dependencies from package.json
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']  # Runs: npm install
+
+  # Step 2: Use the npm builder image again to run the build script in production mode
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build', '--prod']  # Runs: npm run build --prod
+
+  # Step 3: Use the gcloud builder image to deploy the app to Google App Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'app',           # gcloud app command
+        'deploy',        # deploy the app
+        '--quiet',       # disable prompts (for automation)
+        '--version=$SHORT_SHA'  # deploy with version name = short git commit SHA
+      ]
