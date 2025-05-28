@@ -1,5 +1,5 @@
 steps:
-# Stage 1: Create bucket
+# Stage 1: Create GCS Bucket
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   id: "Create Bucket"
   entrypoint: 'bash'
@@ -8,10 +8,10 @@ steps:
     - |
       echo "Starting bucket creation..."
       gsutil mb -l us-central1 gs://terraform-bucket-nishant-12345 || echo "Bucket already exists"
-      echo "Bucket created!"
+      echo "Bucket creation complete ✅"
       sleep 2
 
-# Stage 2: Create VPC network
+# Stage 2: Create VPC Network
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   id: "Create VPC"
   entrypoint: 'bash'
@@ -20,10 +20,10 @@ steps:
     - |
       echo "Starting VPC creation..."
       gcloud compute networks create terraformvpc-nishant --subnet-mode=auto || echo "VPC already exists"
-      echo "VPC created!"
+      echo "VPC creation complete ✅"
       sleep 2
 
-# Stage 3: Create VM instance
+# Stage 3: Create VM Instance
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   id: "Create VM"
   entrypoint: 'bash'
@@ -35,9 +35,9 @@ steps:
         --zone=us-central1-c \
         --machine-type=f1-micro \
         --network=terraformvpc-nishant \
-        --image=debian-11 \
+        --image-family=debian-12 \
         --image-project=debian-cloud || echo "VM may already exist"
-      echo "VM created!"
+      echo "VM creation complete ✅"
       sleep 2
 
 timeout: 600s
